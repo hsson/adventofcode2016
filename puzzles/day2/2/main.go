@@ -40,25 +40,13 @@ func (p *player) process(line string) rune {
 }
 
 func (c *coord) move(dir rune) {
-	if dir == 'U' && c.y > 0 {
-		nY := c.y - 1
-		if keypad[nY][c.x] != ' ' {
-			c.y = nY
-		}
-	} else if dir == 'D' && c.y < 4 {
-		nY := c.y + 1
-		if keypad[nY][c.x] != ' ' {
-			c.y = nY
-		}
-	} else if dir == 'L' && c.x > 0 {
-		nX := c.x - 1
-		if keypad[c.y][nX] != ' ' {
-			c.x = nX
-		}
-	} else if dir == 'R' && c.x < 4 {
-		nX := c.x + 1
-		if keypad[c.y][nX] != ' ' {
-			c.x = nX
-		}
+	if dir == 'U' && c.y > 0 && keypad[c.y-1][c.x] != ' ' {
+		c.y--
+	} else if dir == 'D' && c.y < 4 && keypad[c.y+1][c.x] != ' ' {
+		c.y++
+	} else if dir == 'L' && c.x > 0 && keypad[c.y][c.x-1] != ' ' {
+		c.x--
+	} else if dir == 'R' && c.x < 4 && keypad[c.y][c.x+1] != ' ' {
+		c.x++
 	}
 }
