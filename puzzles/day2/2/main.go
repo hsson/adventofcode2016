@@ -14,10 +14,6 @@ var keypad = [][]rune{
 	[]rune{' ', ' ', 'D', ' ', ' '},
 }
 
-type player struct {
-	pos coord
-}
-
 type coord struct {
 	x, y int
 }
@@ -25,18 +21,13 @@ type coord struct {
 func main() {
 	input, _ := ioutil.ReadFile("../input.txt")
 	lines := strings.Split(string(input), "\n")
-	p := player{}
-	p.pos = coord{0, 2} // Start at number 5
+	pos := coord{0, 2} // Start at number 5
 	for _, line := range lines {
-		fmt.Printf("%c", p.process(line))
+		for _, c := range line {
+			pos.move(c)
+		}
+		fmt.Printf("%c", keypad[pos.y][pos.x])
 	}
-}
-
-func (p *player) process(line string) rune {
-	for _, c := range line {
-		p.pos.move(c)
-	}
-	return keypad[p.pos.y][p.pos.x]
 }
 
 func (c *coord) move(dir rune) {
