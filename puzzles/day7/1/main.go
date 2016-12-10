@@ -8,25 +8,43 @@ import (
 )
 
 var inBrackets = regexp.MustCompile(`\[(.*?)\]`)
-var outsideBrackets = regexp.MustCompile(`(.*?)\[.*?\]`)
+var outsideBrackets = regexp.MustCompile(`(.*?)(?:\[.*?\]|$)`)
 
 func main() {
 	input, _ := ioutil.ReadFile("../input.txt")
 	lines := strings.Split(string(input), "\n")
 	supported := 0
 	for _, line := range lines {
-		break
 		if isLineValid(extractSubparts(line)) {
 			supported++
 		}
-		break
 	}
-	isLineValid(extractSubparts("hhttjuhgvcgkisaqof[obpleewrfrrsgpumz]umcmeaytqjlqkyrawp[rhkhciyzmxciiysv]"))
 	fmt.Println(supported)
 }
 
 func isLineValid(normals, hypernets []string) bool {
-	return true
+	for _, hypernet := range hypernets {
+		if containsABBA(hypernet) {
+			return false
+		}
+	}
+	for _, normal := range normals {
+		if containsABBA(normal) {
+			return true
+		}
+	}
+	return false
+}
+
+func containsABBA(line string) bool {
+	for i := 0; i < len(line)-3; i++ {
+		partOne := line[i : i+2]
+		partTwo := line[i+2 : i+4]
+		if partOne[1] == partTwo[0] && partOne[0] == partTwo[1] && partOne[0] != partOne[1] {
+			return true
+		}
+	}
+	return false
 }
 
 func extractSubparts(line string) (normals, hypernets []string) {
